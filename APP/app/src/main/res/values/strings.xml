@@ -1,3 +1,22 @@
 <resources>
-    <string name="app_name">Fixit</string>
+
+    <string name="app_name"> FixIt </string>
+
+    <!-- MainActivity Strings -->
+    <string name="tv_welcome"> Bem vindo! </string>
+    <string name="btn_login"> Login </string>
+    <string name="btn_register"> Registrar </string>
+    <string name="title_activity_register">Register</string>
+
+    <!-- RegisterActivity Strings -->
+    <string name="tv_name"> Name </string>
+    <string name="tv_phone"> Phone </string>
+    <string name="tv_email"> Email </string>
+    <string name="tv_password"> Password </string>
+    <string name="tv_confirm_pass"> Confirm Password </string>
+    <string name="hint_name"> Nome </string>
+    <string name="hint_phone"> (99) 12345–67899 </string>
+    <string name="hint_email"> email@provedor.com </string>
+    <string name="hint_password"> ***** </string>
+    <string name="hint_confirm_pass"> ***** </string>
 </resources>
