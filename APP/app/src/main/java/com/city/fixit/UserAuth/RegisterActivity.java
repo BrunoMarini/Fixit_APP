@@ -1,9 +1,10 @@
-package com.city.fixit;
+package com.city.fixit.UserAuth;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -11,16 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.city.fixit.R;
 import com.city.fixit.ServerCommunication.CustomOkHttpClient;
 import com.city.fixit.ServerCommunication.JsonParser;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
+import com.city.fixit.Utils.Utils;
 import com.santalu.maskedittext.MaskEditText;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends Activity implements Callback {
@@ -45,9 +49,9 @@ public class RegisterActivity extends Activity implements Callback {
         mContext = this;
         mCallback = this;
         mEtName = findViewById(R.id.etName);
-        mEtEmail = findViewById(R.id.etEmail);
+        mEtEmail = findViewById(R.id.etLoginEmail);
         mEtPhone = findViewById(R.id.etPhone);
-        mEtPassword = findViewById(R.id.etPassword);
+        mEtPassword = findViewById(R.id.etLoginPassword);
         mEtConfirmPass = findViewById(R.id.etConfirmPass);
 
         mBtnRegister = findViewById(R.id.btnRegisterUser);
@@ -65,46 +69,45 @@ public class RegisterActivity extends Activity implements Callback {
 
                 if(isInputValid(name, email, phone, pass, confirm)) {
                     FLog.d(TAG, "Valid inputs! Proceeding with the requests!");
-                    boolean ret = CustomOkHttpClient.sendCreateAccountRequestSync(mContext, mCallback, name, email, phone, pass);
+                    boolean ret = CustomOkHttpClient.sendCreateAccountRequest(mContext, mCallback, name, email, phone, pass);
                     if(!ret) {
-                        showAlertDialog("Erro!", "Impossível conectar com o servidor,\n" +
-                                                                    "Verifique sua conexão!");
+                        showAlertDialog("Erro!", "Impossível conectar ao servidor,\n Verifique sua conexão!");
                     }
                 }
             }
         });
-
     }
 
     private boolean isInputValid(String name, String email, String phone, String pass, String confirm) {
-        StringBuilder s = new StringBuilder();
+        ArrayList<String> s = new ArrayList<>();
         if(name.length() < 4) {
             mEtName.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.append("Seu nome deve conter pelo menos 4 caracteres!\n");
+            s.add("Seu nome deve conter pelo menos 4 caracteres!");
         }
 
         if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mEtEmail.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.append("Email não valido!\n");
+            s.add("Email não valido!");
         }
 
         if(!Pattern.compile(Constants.PHONE_REGEX).matcher(phone).matches()) {
             mEtPhone.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.append("Telefone não valido!\n");
+            s.add("Telefone não valido!");
         }
 
-        if(pass.length() < 4) {
+        if(pass.length() < Constants.PASSWORD_MIN_LENGTH) {
             mEtPassword.setBackgroundResource(R.drawable.edit_text_error_shape);
             mEtConfirmPass.setText("");
-            s.append("Senha deve conter mais de 4 caracteres!\n");
+            s.add("Senha deve conter mais de 4 caracteres!");
         } else if (!pass.equals(confirm)){
             mEtPassword.setBackgroundResource(R.drawable.edit_text_error_shape);
             mEtConfirmPass.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.append("As senhas inseridas são diferentes!\n");
+            s.add("As senhas inseridas são diferentes!");
         }
 
-        if(s.length() > 0) {
-            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+        if(s.size() > 0) {
+            Toast.makeText(mContext, Utils.prepareErrorMessage(s), Toast.LENGTH_LONG).show();
+            FLog.d(TAG, "Stopped! User inserted invalid input!");
             return false;
         }
         return true;
@@ -123,19 +126,12 @@ public class RegisterActivity extends Activity implements Callback {
         if(response.isSuccessful()) {
             FLog.d(TAG, "Successful response!");
             showAlertDialog("Sucesso!","Usuário cadastrado com sucesso!\n" +
-                                                        "Aguardando confirmação por email!");
-            // TODO: Start login activity :)
+                                                        "Aguardando confirmação por email!\n" +
+                                                            "(Não se esqueça de checar sua caixa de SPAM!)", true);
         } else {
-            FLog.d(TAG, "Error! Server Response: " +
-                    JsonParser.getResponseMessage(response.body().string()));
-            switch (response.code()) {
-                case Constants.HTTP_CONFLICT:
-                    showAlertDialog("Erro!", "Usuário já cadastrado na base de dados!");
-                    break;
-                case Constants.HTTP_SERVER_ERROR:
-                    showAlertDialog("Erro!", "Aconteceu um erro imprevisto no servidor!");
-                    break;
-            }
+            String serverMessage = JsonParser.getResponseMessage(response.body().string());
+            FLog.d(TAG, "Error! Server Response: " + serverMessage);
+            showAlertDialog("Erro!", serverMessage);
         }
     }
 
@@ -147,13 +143,18 @@ public class RegisterActivity extends Activity implements Callback {
     }
 
     private void showAlertDialog(String title, String message) {
+        showAlertDialog(title, message, false);
+    }
+
+    private void showAlertDialog(String title, String message, final boolean logged) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(message);
         dialog.setTitle(title);
         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Do nothing when user press ok?
+                if(logged)
+                    startActivity(new Intent(mContext, LoginActivity.class));
             }
         });
         RegisterActivity.this.runOnUiThread(new Runnable() {

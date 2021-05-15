@@ -22,10 +22,32 @@ public class JsonParser {
         return jsonObject.toString();
     }
 
+    public static String loginJson(String email, String pass) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("email", email);
+            jsonObject.put("password", pass);
+        } catch (JSONException e) {
+            FLog.e(TAG, "Exception during login JSON: " + e.getMessage());
+        }
+        return jsonObject.toString();
+    }
+
     public static String getResponseMessage(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             return jsonObject.getString("message");
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static String getResponseToken(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            return jsonObject.getString("token");
         } catch (JSONException e) {
             FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
         }

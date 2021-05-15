@@ -25,8 +25,8 @@ public class CustomOkHttpClient {
     private static final String TAG = "CustomOkHttpClient";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public static boolean sendCreateAccountRequestSync(Context context, Callback callback,
-                                                       String name, String email, String phone, String pass) {
+    public static boolean sendCreateAccountRequest(Context context, Callback callback,
+                                                   String name, String email, String phone, String pass) {
         if(!isNetworkAvailable(context)) {
             FLog.d(TAG, "Network not available!");
             return false;
@@ -39,19 +39,40 @@ public class CustomOkHttpClient {
                 .addPathSegment(Constants.SERVER_REGISTER)
                 .build();
 
-        FLog.d(TAG, "URL: " + url);
-
         String json = JsonParser.createAccountJson(name, email, phone, pass);
+        performRequest(url, json, callback);
+        return true;
+    }
+
+    public static boolean sendLoginRequest(Context context, Callback callback,
+                                            String email, String pass) {
+        if(!isNetworkAvailable(context)) {
+            FLog.d(TAG, "Network not available!");
+            return false;
+        }
+        FLog.d(TAG, "EMAIL: " + email + "Password: " + pass);
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(Constants.SERVER_SCHEME_HTTPS)
+                .host(Constants.SERVER_HOST)
+                .addPathSegment(Constants.SERVER_USER)
+                .addPathSegment(Constants.SERVER_LOGIN)
+                .build();
+
+        String json = JsonParser.loginJson(email, pass);
+        performRequest(url, json, callback);
+        return true;
+    }
+
+    private static void performRequest(HttpUrl url, String postJson, Callback callback) {
+        FLog.d(TAG, "URL: " + url);
         Request request = new Request.Builder()
                 .url(url)
-                .post(RequestBody.create(JSON, json))
+                .post(RequestBody.create(JSON, postJson))
                 .build();
 
         FLog.d(TAG, "Enqueuing new retrofit callback!");
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.newCall(request).enqueue(callback);
-
-        return true;
     }
 
     private static Boolean isNetworkAvailable(Context context) {
