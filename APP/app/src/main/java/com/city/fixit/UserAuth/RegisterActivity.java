@@ -138,8 +138,7 @@ public class RegisterActivity extends Activity implements Callback {
     @Override
     public void onFailure(Request request, IOException e) {
         FLog.d(TAG, "Device not able to connect with server! " + e.getMessage());
-        showAlertDialog("Error!", "Impossível conectar com o servidor!\n" +
-                                                    "Por favor tente novamente mais tarde!");
+        showAlertDialog("Error!", "Impossível conectar com o servidor!\n Por favor tente novamente mais tarde!");
     }
 
     private void showAlertDialog(String title, String message) {

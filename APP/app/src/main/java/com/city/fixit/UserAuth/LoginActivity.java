@@ -69,7 +69,6 @@ public class LoginActivity extends Activity implements Callback {
 
     private boolean isInputValid(String email, String pass) {
         ArrayList<String> s = new ArrayList<>();
-        FLog.d(TAG, "EMIL: " + email + " pass: " + pass);
         if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             s.add("Email inválido!");
         }
@@ -123,7 +122,7 @@ public class LoginActivity extends Activity implements Callback {
             // TODO: Is this case possible?
         } else {
             String serverMessage = JsonParser.getResponseMessage(response.body().string());
-            FLog.d(TAG, "Error! Server Response: " + serverMessage);
+            FLog.d(TAG, "Error! Server Response: " + "[" + response.code() + "] " + serverMessage);
             showAlertMessage(serverMessage);
         }
     }
