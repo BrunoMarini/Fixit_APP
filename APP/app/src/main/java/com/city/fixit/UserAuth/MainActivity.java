@@ -63,10 +63,8 @@ public class MainActivity extends AppCompatActivity {
                                                                     @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         FLog.d(TAG, "Permissions requested!");
-        if (requestCode == Constants.CAMERA_REQUEST_CODE
-                || requestCode == Constants.LOCATION_REQUEST_FINE_CODE
-                    || requestCode == Constants.LOCATION_REQUEST_COARSE_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == Constants.GENERIC_REQUEST_CODE) {
+            if (grantResults.length > 0 && PermissionsManager.checkGrantResult(grantResults)) {
                 FLog.d(TAG, "Permission granted: " + Utils.permissionString(requestCode));
             } else {
                 FLog.d(TAG, "Permissions not granted! " + Utils.permissionString(requestCode));

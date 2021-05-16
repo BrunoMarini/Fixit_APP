@@ -6,6 +6,7 @@ public class Constants {
     public static final int CAMERA_REQUEST_CODE = 100;
     public static final int LOCATION_REQUEST_FINE_CODE = 99;
     public static final int LOCATION_REQUEST_COARSE_CODE = 101;
+    public static final int GENERIC_REQUEST_CODE = 103;
     public static final String EXTRA_IMAGE = "IntentImageExtra";
     public static final String EXTRA_LOCATION = "IntentLocationExtra";
 

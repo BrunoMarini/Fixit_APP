@@ -24,19 +24,13 @@ import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
 import com.city.fixit.Utils.Utils;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity implements LocationListener {
 
     private static final String TAG = "HomeActivity";
 
     private Context mContext;
     private volatile Location mLocation = null;
     private LocationManager mLocationManager;
-    private LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
-            mLocation = location;
-        }
-    };
 
     @SuppressLint("MissingPermission")
     @Override
@@ -48,8 +42,9 @@ public class HomeActivity extends Activity {
 
         mContext = this;
         if(PermissionsManager.checkAllPermissions(mContext, (Activity) mContext)) {
+            FLog.d(TAG, "All permissions granted! Registering Location!");
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    0, 0, mLocationListener);
+                    100, 100, this);
         } else {
             FLog.d(TAG, "Permission not granted! Cant register Location Listener!");
         }
@@ -58,11 +53,12 @@ public class HomeActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PermissionsManager.checkAllPermissions(mContext, (Activity)mContext)
-                        && mLocation != null) {
+                FLog.d(TAG, "onClick(): New Report pressed!");
+                if(PermissionsManager.checkAllPermissions(mContext, (Activity) mContext)) {
                     startReportFlow();
                 } else {
-                    showAlertDialog("Erro!", "Permissão necessária para continuar!");
+                    showAlertDialog("Erro!", "Permissão necessária para continuar!\n" +
+                            "Vá em configurações -> APPs Procure o FixIt e conceda as permissões necessárias!");
                 }
             }
         });
@@ -73,10 +69,8 @@ public class HomeActivity extends Activity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         FLog.d(TAG, "Permissions request response!");
-        if (requestCode == Constants.CAMERA_REQUEST_CODE
-                || requestCode == Constants.LOCATION_REQUEST_FINE_CODE
-                    || requestCode == Constants.LOCATION_REQUEST_COARSE_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == Constants.GENERIC_REQUEST_CODE) {
+            if (grantResults.length > 0 && PermissionsManager.checkGrantResult(grantResults)) {
                 FLog.d(TAG, "Permission granted: " + Utils.permissionString(requestCode));
                 if(PermissionsManager.checkAllPermissions(mContext, (Activity)mContext)) {
                     FLog.d(TAG, "Permission granted!");
@@ -102,14 +96,29 @@ public class HomeActivity extends Activity {
         FLog.d(TAG, "Image captured!");
         if(requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            if(extras != null && extras.get("data") != null && mLocation != null) {
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Intent intent = new Intent(mContext, FormActivity.class);
-                intent.putExtra(Constants.EXTRA_IMAGE, imageBitmap);
-                intent.putExtra(Constants.EXTRA_LOCATION, mLocation);
-                startActivity(intent);
+            if(extras != null && extras.get("data") != null) {
+                if(mLocation != null) {
+                    FLog.d(TAG, "Data success! Starting FormActivity!");
+                    mLocationManager.removeUpdates(this);
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    Intent intent = new Intent(mContext, FormActivity.class);
+                    intent.putExtra(Constants.EXTRA_IMAGE, imageBitmap);
+                    intent.putExtra(Constants.EXTRA_LOCATION, mLocation);
+                    startActivity(intent);
+                } else {
+                    boolean gpsEnabled = false;
+                    boolean networkEnabled = false;
+                    try {
+                        gpsEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        networkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                    } catch(Exception ex) {
+                        FLog.d(TAG, "Error getting services provided!");
+                    }
+                    FLog.d(TAG, "Location null! GpsEnabled: " + gpsEnabled + " Network: " + networkEnabled);
+                    showAlertDialog("Erro!", "Não foi possível pegar sua localizacao atual!\nSua internet e sua localização estão ativos?");
+                }
             } else {
-                showAlertDialog("Erro", "Erro ao carregar a imagem e/ou localização");
+                showAlertDialog("Erro", "Erro ao carregar a imagem!\nPor favor tente novamente!");
             }
         }
     }
@@ -131,5 +140,16 @@ public class HomeActivity extends Activity {
                 alertDialog.show();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        mLocation = location;
     }
 }

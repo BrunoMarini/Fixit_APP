@@ -42,6 +42,8 @@ public class Utils {
                 return "LocationFine";
             case Constants.LOCATION_REQUEST_COARSE_CODE:
                 return "LocationCoarse";
+            case Constants.GENERIC_REQUEST_CODE:
+                return "GenericRequest";
             default:
                 return "Undefined";
         }
