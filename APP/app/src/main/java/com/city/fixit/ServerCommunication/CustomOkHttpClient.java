@@ -10,6 +10,7 @@ import android.os.Build;
 
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
+import com.city.fixit.Utils.Utils;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.MediaType;
@@ -50,7 +51,6 @@ public class CustomOkHttpClient {
             FLog.d(TAG, "Network not available!");
             return false;
         }
-        FLog.d(TAG, "EMAIL: " + email + "Password: " + pass);
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(Constants.SERVER_SCHEME_HTTPS)
                 .host(Constants.SERVER_HOST)
@@ -60,6 +60,39 @@ public class CustomOkHttpClient {
 
         String json = JsonParser.loginJson(email, pass);
         performRequest(url, json, callback);
+        return true;
+    }
+
+    public static boolean sendReportRequest(Context context, Callback callback,
+                    String type, String description, double lat, double log, String image) {
+        if(!isNetworkAvailable(context)) {
+            FLog.d(TAG, "Network not available");
+            return false;
+        }
+
+        String auth = Utils.loadToken(context);
+        if(auth == null) {
+            FLog.d(TAG, "Token null");
+            return false;
+        }
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(Constants.SERVER_SCHEME_HTTPS)
+                .host(Constants.SERVER_HOST)
+                .addPathSegment(Constants.SERVER_REPORT)
+                .addPathSegment(Constants.SERVER_NEW_REPORT)
+                .build();
+        String json = JsonParser.reportJson(type, description, lat, log, image);
+        FLog.d(TAG, "URL: " + url  + "\n\nJSON: " + json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + auth)
+                .post(RequestBody.create(JSON, json))
+                .build();
+        FLog.d(TAG, "Enqueuing retrofit callback!");
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(callback);
         return true;
     }
 

@@ -19,4 +19,21 @@
     <string name="hint_email"> email@provedor.com </string>
     <string name="hint_password"> ***** </string>
     <string name="hint_confirm_pass"> ***** </string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <!-- HomeActivity -->
+    <string name="btn_reportar_problem"> Novo Reporte </string>
+    <string name="title_activity_form">FormActivity</string>
+
+    <!-- FormActivity -->
+    <string name="tv_select_type"> Tipo de problema: </string>
+    <string name="btn_submit"> Enviar Reporte </string>
+    <string-array name="report_type_array">
+        <item> Selecione </item>
+        <item> Depredação </item>
+        <item> Via (Rua/Asfalto) </item>
+        <item> Vazamento (Agua/Esgoto) </item>
+        <item> Acumulo de Lixo </item>
+        <item> Enchente </item>
+    </string-array>
 </resources>

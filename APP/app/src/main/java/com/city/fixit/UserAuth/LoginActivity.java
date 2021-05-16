@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.city.fixit.R;
+import com.city.fixit.Report.HomeActivity;
 import com.city.fixit.ServerCommunication.CustomOkHttpClient;
 import com.city.fixit.ServerCommunication.JsonParser;
 import com.city.fixit.Utils.Constants;
@@ -117,7 +119,7 @@ public class LoginActivity extends Activity implements Callback {
             String token = JsonParser.getResponseToken(response.body().string());
             if(Utils.saveToken(mContext, token)) {
                 FLog.d(TAG, "Token saved successfully and user logged in :)");
-                //TODO: Startar a atividade de report
+                startActivity(new Intent(mContext, HomeActivity.class));
             }
             // TODO: Is this case possible?
         } else {

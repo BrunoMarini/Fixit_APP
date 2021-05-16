@@ -2,6 +2,7 @@ package com.city.fixit.ServerCommunication;
 
 import com.city.fixit.Utils.FLog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +31,21 @@ public class JsonParser {
             jsonObject.put("password", pass);
         } catch (JSONException e) {
             FLog.e(TAG, "Exception during login JSON: " + e.getMessage());
+        }
+        return jsonObject.toString();
+    }
+
+    public static String reportJson(String type, String description, double lat, double log, String image) {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonObject.put("type", type);
+            jsonObject.put("description", description);
+            jsonArray.put(lat); jsonArray.put(log);
+            jsonObject.put("coordinates", jsonArray);
+            jsonObject.put("image", image);
+        } catch (JSONException e) {
+            FLog.e(TAG, "Exception during report JSON: " + e.getMessage());
         }
         return jsonObject.toString();
     }
