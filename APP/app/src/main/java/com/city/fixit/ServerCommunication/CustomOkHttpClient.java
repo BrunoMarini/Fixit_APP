@@ -26,6 +26,32 @@ public class CustomOkHttpClient {
     private static final String TAG = "CustomOkHttpClient";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    public static boolean sendUserAuthRequest(Context context, Callback callback, String token) {
+        if(!isNetworkAvailable(context)) {
+            FLog.d(TAG, "Network not available!");
+            return false;
+        }
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(Constants.SERVER_SCHEME_HTTPS)
+                .host(Constants.SERVER_HOST)
+                .addPathSegment(Constants.SERVER_USER)
+                .addPathSegment(Constants.SERVER_VALIDATE)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", Utils.createBearerToken(token))
+                .post(RequestBody.create(JSON, ""))
+                .build();
+
+        FLog.d(TAG, "Enqueuing retrofit callback!");
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(callback);
+
+        return true;
+    }
+
     public static boolean sendCreateAccountRequest(Context context, Callback callback,
                                                    String name, String email, String phone, String pass) {
         if(!isNetworkAvailable(context)) {
@@ -83,11 +109,10 @@ public class CustomOkHttpClient {
                 .addPathSegment(Constants.SERVER_NEW_REPORT)
                 .build();
         String json = JsonParser.reportJson(type, description, lat, log, image);
-        FLog.d(TAG, "URL: " + url  + "\n\nJSON: " + json);
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("Authorization", "Bearer " + auth)
+                .addHeader("Authorization", Utils.createBearerToken(auth))
                 .post(RequestBody.create(JSON, json))
                 .build();
         FLog.d(TAG, "Enqueuing retrofit callback!");

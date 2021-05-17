@@ -10,8 +10,7 @@ import java.util.ArrayList;
 
 public class Utils {
     public static boolean saveToken(Context context, String token) {
-        SharedPreferences sharedPreferences =
-                context.getSharedPreferences(Constants.USER_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
         if(sharedPreferences == null) return false;
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if(editor == null) return false;
@@ -21,9 +20,29 @@ public class Utils {
     }
 
     public static String loadToken(Context context) {
-        SharedPreferences sharedPreferences =
-                context.getSharedPreferences(Constants.USER_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        if(sharedPreferences == null) return null;
         return sharedPreferences.getString(Constants.USER_TOKEN_KEY, null);
+    }
+
+    public static boolean saveRememberMeOption(Context context, boolean option) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        if(sharedPreferences == null) return false;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(editor == null) return false;
+        editor.putBoolean(Constants.USER_REMEMBER_OPTION, option);
+        editor.apply();
+        return true;
+    }
+
+    public static boolean loadRememberMeOption(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        if(sharedPreferences == null) return false;
+        return sharedPreferences.getBoolean(Constants.USER_REMEMBER_OPTION, false);
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(Constants.USER_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static String prepareErrorMessage(ArrayList<String> errors) {
@@ -53,5 +72,9 @@ public class Utils {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         b.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+    }
+
+    public static String createBearerToken(String token) {
+        return "Bearer " + token;
     }
 }

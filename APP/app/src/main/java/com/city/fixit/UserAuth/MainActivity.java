@@ -18,9 +18,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.city.fixit.R;
+import com.city.fixit.Report.HomeActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
@@ -37,6 +39,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(Constants.EXTRA_ON_SUCCESS)) {
+            startActivity(new Intent(mContext, HomeActivity.class));
+        }
+        if(intent.hasExtra(Constants.EXTRA_ON_ERROR)) {
+            FLog.d(TAG, "User not valid!");
+            //TODO: Show error message?
+        }
+        if(intent.hasExtra(Constants.EXTRA_ON_FAILURE)) {
+            FLog.d(TAG, "Device not able to connect with server!");
+            showAlertMessage("Impossível conectar com o servidor!\n Verifique sua conexão e tente novamente mais tarde!");
+        }
 
         Button btnLogin = findViewById(R.id.btnMainLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +86,24 @@ public class MainActivity extends AppCompatActivity {
                 FLog.d(TAG, "Permissions not granted! " + Utils.permissionString(requestCode));
             }
         }
+    }
+
+    private void showAlertMessage(String s) {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Error!");
+        dialog.setMessage(s);
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing when user press ok
+            }
+        });
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog alertDialog = dialog.create();
+                alertDialog.show();
+            }
+        });
     }
 }

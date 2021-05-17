@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.city.fixit.R;
@@ -34,6 +35,7 @@ public class LoginActivity extends Activity implements Callback {
     private Callback mCallback;
 
     private Button mBtnLogin;
+    private Switch mSwitch;
 
     private EditText mEtEmail;
     private EditText mEtPassword;
@@ -48,6 +50,7 @@ public class LoginActivity extends Activity implements Callback {
 
         mEtEmail = findViewById(R.id.etLoginEmail);
         mEtPassword = findViewById(R.id.etLoginPassword);
+        mSwitch = findViewById(R.id.switchRememberMe);
 
         mBtnLogin = findViewById(R.id.btnLogin);
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +122,7 @@ public class LoginActivity extends Activity implements Callback {
             String token = JsonParser.getResponseToken(response.body().string());
             if(Utils.saveToken(mContext, token)) {
                 FLog.d(TAG, "Token saved successfully and user logged in :)");
+                Utils.saveRememberMeOption(mContext, mSwitch.isChecked());
                 startActivity(new Intent(mContext, HomeActivity.class));
             }
             // TODO: Is this case possible?

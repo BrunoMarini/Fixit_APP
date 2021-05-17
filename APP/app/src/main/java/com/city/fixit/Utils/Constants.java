@@ -7,8 +7,12 @@ public class Constants {
     public static final int LOCATION_REQUEST_FINE_CODE = 99;
     public static final int LOCATION_REQUEST_COARSE_CODE = 101;
     public static final int GENERIC_REQUEST_CODE = 103;
+
     public static final String EXTRA_IMAGE = "IntentImageExtra";
     public static final String EXTRA_LOCATION = "IntentLocationExtra";
+    public static final String EXTRA_ON_FAILURE = "IntentFailureExtra";
+    public static final String EXTRA_ON_ERROR = "IntentErrorExtra";
+    public static final String EXTRA_ON_SUCCESS = "IntentExtraSuccess";
 
     public static final String[] REPORT_TYPES = {
         "Selecione", "Depredação", "Via (Rua/Asfalto)", "Vazamento (Agua/Esgoto)", "Acumulo de Lixo", "Enchente"
@@ -25,6 +29,7 @@ public class Constants {
     public static final String SERVER_LOGIN = "login";
     public static final String SERVER_REPORT = "report";
     public static final String SERVER_NEW_REPORT = "new";
+    public static final String SERVER_VALIDATE = "validate";
 
     public static final int HTTP_CONFLICT = 409;
     public static final int HTTP_SERVER_ERROR = 500;
@@ -38,4 +43,5 @@ public class Constants {
 
     public static final String USER_SHARED_PREFERENCES = "UserSharedPreferences";
     public static final String USER_TOKEN_KEY = "UserTokenKey";
+    public static final String USER_REMEMBER_OPTION = "UserRememberOption";
 }

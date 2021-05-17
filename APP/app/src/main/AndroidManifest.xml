@@ -20,12 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".UserAuth.MainActivity">
+        <activity android:name=".UserAuth.SplashScreen"
+                    android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".UserAuth.MainActivity" />
         <activity android:name=".UserAuth.RegisterActivity" />
         <activity android:name=".UserAuth.LoginActivity" />
         <activity android:name=".Report.FormActivity" />
