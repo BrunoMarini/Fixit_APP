@@ -31,6 +31,7 @@ public class HomeActivity extends Activity implements LocationListener {
     private Context mContext;
     private volatile Location mLocation = null;
     private LocationManager mLocationManager;
+    private LocationListener mLocationListener;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -39,6 +40,7 @@ public class HomeActivity extends Activity implements LocationListener {
         setContentView(R.layout.activity_home);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mLocationListener = this;
 
         mContext = this;
         if(PermissionsManager.checkAllPermissions(mContext, (Activity) mContext)) {
@@ -64,6 +66,7 @@ public class HomeActivity extends Activity implements LocationListener {
         });
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -74,6 +77,8 @@ public class HomeActivity extends Activity implements LocationListener {
                 FLog.d(TAG, "Permission granted: " + Utils.permissionString(requestCode));
                 if(PermissionsManager.checkAllPermissions(mContext, (Activity)mContext)) {
                     FLog.d(TAG, "Permission granted!");
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                            100, 100, mLocationListener);
                     showAlertDialog("Permissao Concedida!", "Tente executar a operação novamente!");
                 } else {
                     FLog.d(TAG, "User did not consent all permissions!");
