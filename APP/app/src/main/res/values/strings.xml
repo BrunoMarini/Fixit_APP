@@ -27,6 +27,7 @@
 
     <!-- FormActivity -->
     <string name="tv_select_type"> Tipo de problema: </string>
+    <string name="tv_short_desc"> Caso deseje escreva uma breve descrição </string>
     <string name="btn_submit"> Enviar Reporte </string>
     <string-array name="report_type_array">
         <item> Selecione </item>
