@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserAuth.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/app_name"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toTopOf="@+id/etLoginEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etLoginEmail"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="40sp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/hint_email"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingStart="6dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/etLoginPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/etLoginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="40sp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingStart="6dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/switchRememberMe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/tv_email"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/etLoginEmail"
+        app:layout_constraintStart_toStartOf="@+id/etLoginEmail" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/tv_password"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/etLoginPassword"
+        app:layout_constraintStart_toStartOf="@+id/etLoginPassword" />
+
+
+    <Switch
+        android:id="@+id/switchRememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="36dp"
+        android:checked="false"
+        android:switchMinWidth="56dp"
+        android:text="Permanecer logado"
+        android:textColor="@color/colorLightPurple"
+        android:textOff="Não"
+        android:textOn="Sim"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintEnd_toEndOf="@+id/etLoginPassword" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/button_shape"
+        android:shadowColor="#A8A8A8"
+        android:text="@string/btn_login"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
