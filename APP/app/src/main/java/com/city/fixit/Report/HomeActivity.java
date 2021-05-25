@@ -46,7 +46,7 @@ public class HomeActivity extends Activity implements LocationListener {
         if(PermissionsManager.checkAllPermissions(mContext, (Activity) mContext)) {
             FLog.d(TAG, "All permissions granted! Registering Location!");
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    100, 100, this);
+                    0, 0, mLocationListener);
         } else {
             FLog.d(TAG, "Permission not granted! Cant register Location Listener!");
         }
@@ -102,9 +102,20 @@ public class HomeActivity extends Activity implements LocationListener {
         if(requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if(extras != null && extras.get("data") != null) {
+                int t = 20;
+                do {
+                    FLog.d(TAG, "Loop waiting for location " + t);
+                    t--;
+                    synchronized (mContext) {
+                        if(mLocation != null) {
+                            break;
+                        }
+                    }
+                    try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
+                } while(t > 0);
+
                 if(mLocation != null) {
-                    FLog.d(TAG, "Data success! Starting FormActivity!");
-                    mLocationManager.removeUpdates(this);
+                    mLocationManager.removeUpdates(mLocationListener);
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     Intent intent = new Intent(mContext, FormActivity.class);
                     intent.putExtra(Constants.EXTRA_IMAGE, imageBitmap);
@@ -150,11 +161,13 @@ public class HomeActivity extends Activity implements LocationListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLocationManager.removeUpdates(this);
+        mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        mLocation = location;
+        synchronized (mContext) {
+            mLocation = location;
+        }
     }
 }
