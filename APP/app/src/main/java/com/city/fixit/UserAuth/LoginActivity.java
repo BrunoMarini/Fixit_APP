@@ -129,7 +129,8 @@ public class LoginActivity extends Activity implements Callback {
         } else {
             String serverMessage = JsonParser.getResponseMessage(response.body().string());
             FLog.d(TAG, "Error! Server Response: " + "[" + response.code() + "] " + serverMessage);
-            showAlertMessage(serverMessage);
+            showAlertMessage(serverMessage + "\nEnviamos o email de confirmação novamente," +
+                                                    "não esqueça de verificar sua caixa de SPAM");
         }
     }
 
