@@ -12,19 +12,24 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import com.city.fixit.R;
+import com.city.fixit.UserAuth.LoginActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
 import com.city.fixit.Utils.Utils;
 
-public class HomeActivity extends Activity implements LocationListener {
+public class HomeActivity extends FragmentActivity implements LocationListener {
 
     private static final String TAG = "HomeActivity";
 
@@ -32,6 +37,9 @@ public class HomeActivity extends Activity implements LocationListener {
     private volatile Location mLocation = null;
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
+
+    private Button mBtnNew;
+    private boolean mPressedOnce = false;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -51,8 +59,8 @@ public class HomeActivity extends Activity implements LocationListener {
             FLog.d(TAG, "Permission not granted! Cant register Location Listener!");
         }
 
-        Button btn = findViewById(R.id.btnNewReport);
-        btn.setOnClickListener(new View.OnClickListener() {
+        mBtnNew = findViewById(R.id.btnNewReport);
+        mBtnNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FLog.d(TAG, "onClick(): New Report pressed!");
@@ -64,6 +72,31 @@ public class HomeActivity extends Activity implements LocationListener {
                 }
             }
         });
+
+        setOnBackPressedTwice();
+        loadingBarStatus(false);
+    }
+
+    private void setOnBackPressedTwice() {
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (mPressedOnce) {
+                    //TODO: Call logout
+                    finish();
+                }
+                mPressedOnce = true;
+                Toast.makeText(mContext, "Pressione VOLTAR novamente para sair", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
     @SuppressLint("MissingPermission")
@@ -98,28 +131,32 @@ public class HomeActivity extends Activity implements LocationListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         FLog.d(TAG, "Image captured!");
-        if(requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            loadingBarStatus(true);
             Bundle extras = data.getExtras();
-            if(extras != null && extras.get("data") != null) {
+            if (extras != null && extras.get("data") != null) {
                 int t = 20;
                 do {
                     FLog.d(TAG, "Loop waiting for location " + t);
                     t--;
                     synchronized (mContext) {
-                        if(mLocation != null) {
+                        if (mLocation != null) {
                             break;
                         }
                     }
-                    try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
-                } while(t > 0);
+                    try { Thread.sleep(200); } 
+                    catch (InterruptedException e) { e.printStackTrace(); }
+                } while (t > 0);
 
-                if(mLocation != null) {
+                if (mLocation != null) {
                     mLocationManager.removeUpdates(mLocationListener);
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     Intent intent = new Intent(mContext, FormActivity.class);
                     intent.putExtra(Constants.EXTRA_IMAGE, imageBitmap);
                     intent.putExtra(Constants.EXTRA_LOCATION, mLocation);
+                    loadingBarStatus(false);
                     startActivity(intent);
                 } else {
                     boolean gpsEnabled = false;
@@ -127,13 +164,15 @@ public class HomeActivity extends Activity implements LocationListener {
                     try {
                         gpsEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                         networkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                    } catch(Exception ex) {
+                    } catch (Exception ex) {
                         FLog.d(TAG, "Error getting services provided!");
                     }
                     FLog.d(TAG, "Location null! GpsEnabled: " + gpsEnabled + " Network: " + networkEnabled);
+                    loadingBarStatus(false);
                     showAlertDialog("Erro!", "Não foi possível pegar sua localizacao atual!\nSua internet e sua localização estão ativos?");
                 }
             } else {
+                loadingBarStatus(false);
                 showAlertDialog("Erro", "Erro ao carregar a imagem!\nPor favor tente novamente!");
             }
         }
@@ -169,5 +208,15 @@ public class HomeActivity extends Activity implements LocationListener {
         synchronized (mContext) {
             mLocation = location;
         }
+    }
+
+    private void loadingBarStatus(final Boolean status){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.loadingPanel).setVisibility(status ? View.VISIBLE : View.GONE);
+                mBtnNew.setEnabled(!status);
+            }
+        });
     }
 }

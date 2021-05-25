@@ -57,6 +57,7 @@ public class LoginActivity extends Activity implements Callback {
             @Override
             public void onClick(View v) {
                 FLog.d(TAG, "Starting login");
+                loadingBarStatus(true);
                 isErrorState(false);
                 String email = mEtEmail.getText().toString();
                 String pass = mEtPassword.getText().toString();
@@ -65,11 +66,13 @@ public class LoginActivity extends Activity implements Callback {
                     FLog.d(TAG, "Valid input, performing login!");
                     boolean ret = CustomOkHttpClient.sendLoginRequest(mContext, mCallback, email, pass);
                     if(!ret) {
+                        loadingBarStatus(false);
                         showAlertMessage("Impossível conectar ao servidor,\n Verifique sua conexão!");
                     }
                 }
             }
         });
+        loadingBarStatus(false);
     }
 
     private boolean isInputValid(String email, String pass) {
@@ -84,6 +87,7 @@ public class LoginActivity extends Activity implements Callback {
 
         if(s.size() > 0) {
             FLog.d(TAG, "Stopped! User inserted invalid info!");
+            loadingBarStatus(false);
             isErrorState(true);
             Toast.makeText(mContext, Utils.prepareErrorMessage(s), Toast.LENGTH_LONG).show();
             return false;
@@ -118,25 +122,43 @@ public class LoginActivity extends Activity implements Callback {
 
     @Override
     public void onResponse(Response response) throws IOException {
+        loadingBarStatus(false);
         if(response.isSuccessful()) {
             String token = JsonParser.getResponseToken(response.body().string());
             if(Utils.saveToken(mContext, token)) {
                 FLog.d(TAG, "Token saved successfully and user logged in :)");
                 Utils.saveRememberMeOption(mContext, mSwitch.isChecked());
                 startActivity(new Intent(mContext, HomeActivity.class));
+                finish();
             }
             // TODO: Is this case possible?
         } else {
             String serverMessage = JsonParser.getResponseMessage(response.body().string());
             FLog.d(TAG, "Error! Server Response: " + "[" + response.code() + "] " + serverMessage);
-            showAlertMessage(serverMessage + "\nEnviamos o email de confirmação novamente," +
-                                                    "não esqueça de verificar sua caixa de SPAM");
+            if(response.code() == Constants.HTTP_FORBIDDEN) {
+                serverMessage += "\nEnviamos o email de confirmação novamente, não esqueça de " +
+                                                                    "verificar sua caixa de SPAM";
+            }
+            showAlertMessage(serverMessage);
         }
     }
 
     @Override
     public void onFailure(Request request, IOException e) {
+        loadingBarStatus(false);
         FLog.d(TAG, "Device not able to connect with server! " + e.getMessage());
         showAlertMessage("Impossível conectar com o servidor!\n Por favor tente novamente mais tarde!");
+    }
+
+    private void loadingBarStatus(final Boolean status){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.loadingPanel).setVisibility(status ? View.VISIBLE : View.GONE);
+                mEtEmail.setEnabled(!status);
+                mEtPassword.setEnabled(!status);
+                mBtnLogin.setEnabled(!status);
+            }
+        });
     }
 }

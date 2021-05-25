@@ -59,6 +59,7 @@ public class RegisterActivity extends Activity implements Callback {
             @Override
             public void onClick(View v) {
                 FLog.d(TAG, "Starting register!");
+                loadingBarStatus(true);
                 clearPreviousErrors();
 
                 String name = mEtName.getText().toString();
@@ -71,11 +72,13 @@ public class RegisterActivity extends Activity implements Callback {
                     FLog.d(TAG, "Valid inputs! Proceeding with the requests!");
                     boolean ret = CustomOkHttpClient.sendCreateAccountRequest(mContext, mCallback, name, email, phone, pass);
                     if(!ret) {
+                        loadingBarStatus(false);
                         showAlertDialog("Erro!", "Impossível conectar ao servidor,\n Verifique sua conexão!");
                     }
                 }
             }
         });
+        loadingBarStatus(false);
     }
 
     private boolean isInputValid(String name, String email, String phone, String pass, String confirm) {
@@ -106,6 +109,7 @@ public class RegisterActivity extends Activity implements Callback {
         }
 
         if(s.size() > 0) {
+            loadingBarStatus(false);
             Toast.makeText(mContext, Utils.prepareErrorMessage(s), Toast.LENGTH_LONG).show();
             FLog.d(TAG, "Stopped! User inserted invalid input!");
             return false;
@@ -123,6 +127,7 @@ public class RegisterActivity extends Activity implements Callback {
 
     @Override
     public void onResponse(Response response) throws IOException {
+        loadingBarStatus(false);
         if(response.isSuccessful()) {
             FLog.d(TAG, "Successful response!");
             showAlertDialog("Sucesso!","Usuário cadastrado com sucesso!\n" +
@@ -137,6 +142,7 @@ public class RegisterActivity extends Activity implements Callback {
 
     @Override
     public void onFailure(Request request, IOException e) {
+        loadingBarStatus(false);
         FLog.d(TAG, "Device not able to connect with server! " + e.getMessage());
         showAlertDialog("Error!", "Impossível conectar com o servidor!\n Por favor tente novamente mais tarde!");
     }
@@ -152,8 +158,10 @@ public class RegisterActivity extends Activity implements Callback {
         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(logged)
+                if(logged) {
                     startActivity(new Intent(mContext, LoginActivity.class));
+                    finish();
+                }
             }
         });
         RegisterActivity.this.runOnUiThread(new Runnable() {
@@ -161,6 +169,21 @@ public class RegisterActivity extends Activity implements Callback {
             public void run() {
                 AlertDialog alertDialog = dialog.create();
                 alertDialog.show();
+            }
+        });
+    }
+
+    private void loadingBarStatus(final Boolean status){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.loadingPanel).setVisibility(status ? View.VISIBLE : View.GONE);
+                mEtName.setEnabled(!status);
+                mEtEmail.setEnabled(!status);
+                mEtPhone.setEnabled(!status);
+                mEtPassword.setEnabled(!status);
+                mEtConfirmPass.setEnabled(!status);
+                mBtnRegister.setEnabled(!status);
             }
         });
     }
