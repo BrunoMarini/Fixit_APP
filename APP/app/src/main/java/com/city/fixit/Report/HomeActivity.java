@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.city.fixit.R;
-import com.city.fixit.UserAuth.LoginActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
