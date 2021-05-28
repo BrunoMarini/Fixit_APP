@@ -136,6 +136,12 @@ public class RegisterActivity extends Activity implements Callback {
         } else {
             String serverMessage = JsonParser.getResponseMessage(response.body().string());
             FLog.d(TAG, "Error! Server Response: " + serverMessage);
+            if(response.code() == Constants.HTTP_FORBIDDEN) {
+                serverMessage += "\nEmail e/ou telefone bloqueados!";
+            } else if(response.code() == Constants.HTTP_CONFLICT) {
+                serverMessage += "\nEmail e/ou telefone já cadastrados";
+            }
+
             showAlertDialog("Erro!", serverMessage);
         }
     }

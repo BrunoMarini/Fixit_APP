@@ -135,9 +135,12 @@ public class LoginActivity extends Activity implements Callback {
         } else {
             String serverMessage = JsonParser.getResponseMessage(response.body().string());
             FLog.d(TAG, "Error! Server Response: " + "[" + response.code() + "] " + serverMessage);
-            if(response.code() == Constants.HTTP_FORBIDDEN) {
+            if(response.code() == Constants.HTTP_UNAUTHORIZED) {
                 serverMessage += "\nEnviamos o email de confirmação novamente, não esqueça de " +
                                                                     "verificar sua caixa de SPAM";
+            } else if(response.code() == Constants.HTTP_FORBIDDEN) {
+                FLog.d(TAG, "Blocked user");
+                serverMessage += "\nEsse usuário não sera capaz de realizar mais nenhum reporte!";
             }
             showAlertMessage(serverMessage);
         }
