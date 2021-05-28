@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -52,6 +53,8 @@ public class HomeActivity extends FragmentActivity implements LocationListener {
         if(PermissionsManager.checkAllPermissions(mContext, (Activity) mContext)) {
             FLog.d(TAG, "All permissions granted! Registering Location!");
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    0, 0, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                     0, 0, mLocationListener);
         } else {
             FLog.d(TAG, "Permission not granted! Cant register Location Listener!");
@@ -203,7 +206,9 @@ public class HomeActivity extends FragmentActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        FLog.d(TAG, "onLocationChanged");
         synchronized (mContext) {
+            FLog.d(TAG, "updated");
             mLocation = location;
         }
     }
