@@ -18,17 +18,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.city.fixit.R;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
 import com.city.fixit.Utils.Utils;
+import com.google.android.material.navigation.NavigationView;
 
-public class HomeActivity extends FragmentActivity implements LocationListener {
+public class HomeActivity extends AppCompatActivity implements LocationListener {
 
     private static final String TAG = "HomeActivity";
 
@@ -36,6 +42,10 @@ public class HomeActivity extends FragmentActivity implements LocationListener {
     private volatile Location mLocation = null;
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
+
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private Toolbar mToolbar;
 
     private Button mBtnNew;
     private boolean mPressedOnce = false;
@@ -74,6 +84,17 @@ public class HomeActivity extends FragmentActivity implements LocationListener {
             }
         });
 
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+        mToolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(mToolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                                                mToolbar, R.string.navigation_drawer_open,
+                                                    R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
         setOnBackPressedTwice();
         loadingBarStatus(false);
     }
@@ -82,6 +103,11 @@ public class HomeActivity extends FragmentActivity implements LocationListener {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                if(mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    return;
+                }
+
                 if (mPressedOnce) {
                     //TODO: Call logout
                     finish();
