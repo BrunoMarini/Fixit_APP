@@ -10,10 +10,12 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,13 +30,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.city.fixit.R;
+import com.city.fixit.UserAuth.MainActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
 import com.city.fixit.Utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
-public class HomeActivity extends AppCompatActivity implements LocationListener {
+public class HomeActivity extends AppCompatActivity implements LocationListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "HomeActivity";
 
@@ -88,15 +91,22 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         mNavigationView = findViewById(R.id.nav_view);
         mToolbar = findViewById(R.id.toolbar);
 
+        setupNavView();
+        setOnBackPressedTwice();
+        loadingBarStatus(false);
+    }
+
+    private void setupNavView() {
         setSupportActionBar(mToolbar);
+
+        mNavigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                                                 mToolbar, R.string.navigation_drawer_open,
                                                     R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        setOnBackPressedTwice();
-        loadingBarStatus(false);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     private void setOnBackPressedTwice() {
@@ -247,5 +257,39 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 mBtnNew.setEnabled(!status);
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                openWebSite();
+                break;
+            case R.id.user_info:
+            case R.id.user_data:
+            case R.id.change_user_data:
+                //TODO: do
+                break;
+            case R.id.app_logout:
+                logout();
+                break;
+        }
+        return true;
+    }
+
+    private void openWebSite() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://fixit-city.herokuapp.com/"));
+        startActivity(browserIntent);
+    }
+
+    private void logout() {
+        if(Utils.clear(mContext)) {
+            Intent intent = new Intent(mContext, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            showAlertDialog("Erro", "Aconteceu um erro interno!");
+        }
     }
 }

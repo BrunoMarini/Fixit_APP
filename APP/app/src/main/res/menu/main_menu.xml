@@ -8,32 +8,35 @@
             android:icon="@drawable/ic_web"/>
     </group>
 
-    <group android:checkableBehavior="single">
-        <item
-            android:title="@string/nav_user_group">
-            <menu>
-                <item
-                    android:id="@+id/user_info"
-                    android:title="@string/nav_user_info"
-                    android:icon="@drawable/ic_info"/>
-                <item
-                    android:id="@+id/user_data"
-                    android:title="@string/nav_user_data"
-                    android:icon="@drawable/ic_data"/>
-                <item
-                    android:id="@+id/change_user_data"
-                    android:title="@string/nav_user_change"
-                    android:icon="@drawable/ic_update"/>
-            </menu>
-        </item>
-    </group>
+    <item
+        android:title="@string/nav_user_group">
+        <menu>
+            <group android:checkableBehavior="single">
+
+            <item
+                android:id="@+id/user_info"
+                android:title="@string/nav_user_info"
+                android:icon="@drawable/ic_info"/>
+            <item
+                android:id="@+id/user_data"
+                android:title="@string/nav_user_data"
+                android:icon="@drawable/ic_data"/>
+            <item
+                android:id="@+id/change_user_data"
+                android:title="@string/nav_user_change"
+                android:icon="@drawable/ic_update"/>
+            </group>
+        </menu>
+    </item>
 
     <item android:title="@string/nav_app_group">
         <menu>
-            <item
-                android:id="@+id/Logout"
-                android:title="@string/nav_app_lougout"
-                android:icon="@drawable/ic_logout"/>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/app_logout"
+                    android:title="@string/nav_app_lougout"
+                    android:icon="@drawable/ic_logout"/>
+            </group>
         </menu>
     </item>
 
