@@ -23,6 +23,7 @@ public class Constants {
 
     public static final String SERVER_SCHEME_HTTPS = "https";
     public static final String SERVER_HOST = "fixit-city.herokuapp.com";
+    public static final String SERVER_AUTHORIZATION = "Authorization";
 
     public static final String SERVER_USER = "user";
     public static final String SERVER_REGISTER = "register";
@@ -30,6 +31,8 @@ public class Constants {
     public static final String SERVER_REPORT = "report";
     public static final String SERVER_NEW_REPORT = "new";
     public static final String SERVER_VALIDATE = "validate";
+    public static final String SERVER_INFO = "info";
+    public static final String SERVER_STATISTICS = "stats";
 
     public static final int HTTP_CONFLICT = 409;
     public static final int HTTP_SERVER_ERROR = 500;

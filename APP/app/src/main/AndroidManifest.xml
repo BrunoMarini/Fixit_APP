@@ -32,6 +32,8 @@
         <activity android:name=".UserAuth.LoginActivity" />
         <activity android:name=".Report.FormActivity" />
         <activity android:name=".Report.HomeActivity" />
+        <activity android:name=".UserAuth.UserInfoActivity" />
+        <activity android:name=".UserAuth.UserStatisticsActivity" />
     </application>
 
 </manifest>

@@ -11,7 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -31,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.city.fixit.R;
 import com.city.fixit.UserAuth.MainActivity;
+import com.city.fixit.UserAuth.UserInfoActivity;
+import com.city.fixit.UserAuth.UserStatisticsActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.PermissionsManager;
@@ -267,8 +268,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
                 openWebSite();
                 break;
             case R.id.user_info:
-            case R.id.user_data:
-            case R.id.change_user_data:
+                startActivity(new Intent(mContext, UserInfoActivity.class));
+                break;
+            case R.id.user_statistics:
+                startActivity(new Intent(mContext, UserStatisticsActivity.class));
+                break;
+            case R.id.change_user_info:
                 //TODO: do
                 break;
             case R.id.app_logout:

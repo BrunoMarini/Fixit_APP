@@ -14,15 +14,15 @@
             <group android:checkableBehavior="single">
 
             <item
+                android:id="@+id/user_statistics"
+                android:title="@string/nav_user_statistics"
+                android:icon="@drawable/ic_data"/>
+            <item
                 android:id="@+id/user_info"
                 android:title="@string/nav_user_info"
                 android:icon="@drawable/ic_info"/>
             <item
-                android:id="@+id/user_data"
-                android:title="@string/nav_user_data"
-                android:icon="@drawable/ic_data"/>
-            <item
-                android:id="@+id/change_user_data"
+                android:id="@+id/change_user_info"
                 android:title="@string/nav_user_change"
                 android:icon="@drawable/ic_update"/>
             </group>

@@ -69,4 +69,64 @@ public class JsonParser {
         }
         return null;
     }
+
+    public static String getResponseName(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return jsonObject.getString("name");
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static String getResponseEmail(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return jsonObject.getString("email");
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static String getResponsePhone(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return jsonObject.getString("phone");
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static int getResponseViews(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return Integer.parseInt(jsonObject.getString("reportViews"));
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public static int getResponseSolved(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return Integer.parseInt(jsonObject.getString("reportSolved"));
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public static int getResponseReports(String res) {
+        try {
+            JSONObject jsonObject = new JSONObject(res);
+            return Integer.parseInt(jsonObject.getString("reportNumber"));
+        } catch (JSONException e) {
+            FLog.e(TAG, "Error parsing response JSON! " + e.getMessage());
+        }
+        return 0;
+    }
 }
