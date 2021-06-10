@@ -18,7 +18,6 @@ import android.widget.Spinner;
 import com.city.fixit.R;
 import com.city.fixit.ServerCommunication.CustomOkHttpClient;
 import com.city.fixit.ServerCommunication.JsonParser;
-import com.city.fixit.UserAuth.MainActivity;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.Utils;
@@ -27,8 +26,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class FormActivity extends Activity implements Callback {
     private static final String TAG = "FormActivity";
@@ -41,6 +38,7 @@ public class FormActivity extends Activity implements Callback {
     private Spinner mSpinnerTypes;
     private ImageView mImageView;
     private EditText mEtDesc;
+    private Button mBtnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +64,17 @@ public class FormActivity extends Activity implements Callback {
         setSpinnerItems();
         mEtDesc = findViewById(R.id.etUserDescription);
 
-        Button sendButton = findViewById(R.id.btnSubmit);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        mBtnSend = findViewById(R.id.btnSubmit);
+        mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingBarStatus(true);
                 String option = mSpinnerTypes.getSelectedItem().toString();
                 String desc = mEtDesc.getText().toString();
                 if(desc.isEmpty())
                     desc = "";
                 if(option == Constants.REPORT_TYPES[0]) {
+                    loadingBarStatus(false);
                     showAlertDialog("Erro!", "Escolha o tipo de problema!");
                     return;
                 }
@@ -84,10 +84,12 @@ public class FormActivity extends Activity implements Callback {
                         mLocation.getLatitude(),
                         mLocation.getLongitude(),
                         Utils.convertBitmapToBase64(mBitmap))) {
+                    loadingBarStatus(false);
                     showAlertDialog("Erro!", "Impossível conectar ao servidor,\n Verifique sua conexão!");
                 }
             }
         });
+        loadingBarStatus(false);
     }
 
     private void setSpinnerItems() {
@@ -110,6 +112,7 @@ public class FormActivity extends Activity implements Callback {
             public void onClick(DialogInterface dialog, int which) {
                 if(finish) {
                     startActivity(new Intent(mContext, HomeActivity.class));
+                    finish();
                 }
             }
         });
@@ -124,12 +127,14 @@ public class FormActivity extends Activity implements Callback {
 
     @Override
     public void onFailure(Request request, IOException e) {
+        loadingBarStatus(false);
         FLog.d(TAG, "Device not able to connect with server! " + e.getMessage());
         showAlertDialog("Error!", "Impossível conectar com o servidor!\n Por favor tente novamente mais tarde!");
     }
 
     @Override
     public void onResponse(Response response) throws IOException {
+        loadingBarStatus(false);
         if(response.isSuccessful()) {
             FLog.d(TAG, "Successful response!");
             showAlertDialog("Sucesso!", "Obrigado por ajudar a cidade! \n" +
@@ -139,5 +144,17 @@ public class FormActivity extends Activity implements Callback {
             FLog.d(TAG, "Error! Server response: " + serverResponse);
             showAlertDialog("Error!", serverResponse);
         }
+    }
+
+    private void loadingBarStatus(final Boolean status){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.loadingPanel).setVisibility(status ? View.VISIBLE : View.GONE);
+                mBtnSend.setEnabled(!status);
+                mEtDesc.setEnabled(!status);
+                mSpinnerTypes.setEnabled(!status);
+            }
+        });
     }
 }

@@ -44,6 +44,7 @@ public class SplashScreen extends AppCompatActivity implements Callback {
             }
         }
         startActivity(mIntent);
+        finish();
     }
 
     @Override
@@ -51,6 +52,7 @@ public class SplashScreen extends AppCompatActivity implements Callback {
         FLog.d(TAG, "onFailure()");
         mIntent.putExtra(Constants.EXTRA_ON_FAILURE, "");
         startActivity(mIntent);
+        finish();
     }
 
     @Override
@@ -63,5 +65,6 @@ public class SplashScreen extends AppCompatActivity implements Callback {
             mIntent.putExtra(Constants.EXTRA_ON_ERROR, "");
         }
         startActivity(mIntent);
+        finish();
     }
 }

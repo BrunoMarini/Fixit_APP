@@ -24,6 +24,35 @@
     <!-- HomeActivity -->
     <string name="btn_reportar_problem"> Novo Reporte </string>
     <string name="title_activity_form">FormActivity</string>
+    <!-- NavigationView -->
+    <!-- HEADER -->
+    <string name="head_fix_it_logo">FixIt_logo</string>
+    <string name="head_title"> FixIt </string>
+    <string name="head_site"> fixit-city.herokuapp.com/ </string>
+    <!-- MENU -->
+    <string name="navigation_drawer_close">Fechar menu lateral</string>
+    <string name="navigation_drawer_open">Abrir menu lateral</string>
+    <string name="nav_open_site">Abrir site</string>
+    <string name="nav_user_group">Usuário</string>
+    <string name="nav_app_group">APP</string>
+    <string name="nav_user_info">Informações</string>
+    <string name="nav_user_statistics">Minhas estatísticas</string>
+    <string name="nav_user_change">Alterar meus dados</string>
+    <string name="nav_app_lougout">Logout</string>
+
+    <!-- UserInfoActivity & UserStatisticsActivity -->
+    <string name="tv_email_registered">Email cadastrado:</string>
+    <string name="tv_phone_registered">Telefone cadastrado:</string>
+    <string name="message_zero_resolved"><![CDATA[Obrigado por fazer parte do FixIt! <br/> <br/>
+                                            Seus <font color="red"> %d reportes </font> já tiveram
+                                                <font color="red"> %d visualizações </font> e esse
+                                                    número só aumenta! <br/> ]]></string>
+    <string name="message_resolved"> <![CDATA[Obrigado por fazer parte do FixIt! <br/> <br/>
+                                        Seus <font color="red"> %d reportes </font> já tiveram
+                                            <font color="red"> %d visualizações </font> e esse número
+                                                só aumenta! <br/> <br/> O mais importante é se lembrar que,
+                                                    de todos eles, <font color="red"> %d </font>
+                                                        já foram marcados como resolvidos!]]></string>
 
     <!-- FormActivity -->
     <string name="tv_select_type"> Tipo de problema: </string>

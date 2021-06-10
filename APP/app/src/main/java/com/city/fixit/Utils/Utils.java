@@ -25,6 +25,14 @@ public class Utils {
         return sharedPreferences.getString(Constants.USER_TOKEN_KEY, null);
     }
 
+    public static boolean clear(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        if(sharedPreferences == null) return false;
+        sharedPreferences.edit().remove(Constants.USER_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(Constants.USER_REMEMBER_OPTION).apply();
+        return true;
+    }
+
     public static boolean saveRememberMeOption(Context context, boolean option) {
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         if(sharedPreferences == null) return false;
