@@ -35,13 +35,13 @@ public class JsonParser {
         return jsonObject.toString();
     }
 
-    public static String reportJson(String type, String description, double lat, double log, String image) {
+    public static String reportJson(String type, String description, double lat, double lng, String image) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
             jsonObject.put("type", type);
             jsonObject.put("description", description);
-            jsonArray.put(lat); jsonArray.put(log);
+            jsonArray.put(lng); jsonArray.put(lat);
             jsonObject.put("coordinates", jsonArray);
             jsonObject.put("image", image);
         } catch (JSONException e) {

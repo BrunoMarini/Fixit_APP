@@ -79,6 +79,7 @@ public class FormActivity extends Activity implements Callback {
                     return;
                 }
                 option = Constants.SERVER_EXPECTED_TYPE[mSpinnerTypes.getSelectedItemPosition() - 1];
+                FLog.d(TAG, "lat: " + mLocation.getLatitude() + " lng: " + mLocation.getLongitude());
                 if(!CustomOkHttpClient.sendReportRequest(mContext, mCallback,
                         option, desc,
                         mLocation.getLatitude(),
