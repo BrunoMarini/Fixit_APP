@@ -277,7 +277,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
                 //TODO: do
                 break;
             case R.id.app_logout:
-                logout();
+                Utils.performLogout(mContext);
                 break;
         }
         return true;
@@ -286,15 +286,5 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
     private void openWebSite() {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://fixit-city.herokuapp.com/"));
         startActivity(browserIntent);
-    }
-
-    private void logout() {
-        if(Utils.clear(mContext)) {
-            Intent intent = new Intent(mContext, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        } else {
-            showAlertDialog("Erro", "Aconteceu um erro interno!");
-        }
     }
 }

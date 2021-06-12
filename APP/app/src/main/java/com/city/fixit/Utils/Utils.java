@@ -1,14 +1,19 @@
 package com.city.fixit.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Base64;
+
+import com.city.fixit.UserAuth.MainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class Utils {
+    private static final String TAG = "Utils";
+
     public static boolean saveToken(Context context, String token) {
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         if(sharedPreferences == null) return false;
@@ -84,5 +89,15 @@ public class Utils {
 
     public static String createBearerToken(String token) {
         return "Bearer " + token;
+    }
+
+    public static void performLogout(Context context) {
+        if(Utils.clear(context)) {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            context.startActivity(intent);
+        } else {
+            FLog.e(TAG, "Internal error during app logout");
+        }
     }
 }

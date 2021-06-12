@@ -142,7 +142,10 @@ public class FormActivity extends Activity implements Callback {
         } else {
             String serverResponse = JsonParser.getResponseMessage(response.body().string());
             FLog.d(TAG, "Error! Server response: " + serverResponse);
-            showAlertDialog("Error!", serverResponse);
+            if(response.code() == Constants.HTTP_UNAUTHORIZED) {
+                Utils.performLogout(mContext);
+            }
+            showAlertDialog("Error!", serverResponse, true);
         }
     }
 
