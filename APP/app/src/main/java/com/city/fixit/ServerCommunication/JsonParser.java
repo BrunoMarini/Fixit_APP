@@ -50,6 +50,20 @@ public class JsonParser {
         return jsonObject.toString();
     }
 
+    public static String updateRegisterJson(String name, String phone, String oldPass, String newPass) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (name != null && !name.isEmpty()) jsonObject.put("name", name);
+            if (phone != null && !phone.isEmpty()) jsonObject.put("phone", phone);
+            if (oldPass != null && !oldPass.isEmpty()) jsonObject.put("oldPassword", oldPass);
+            if (newPass != null && !newPass.isEmpty()) jsonObject.put("newPassword", newPass);
+        } catch (JSONException e) {
+            FLog.e(TAG, "Exception during updateRegister JSON: " + e.getMessage());
+        }
+        FLog.d(TAG, "JSON: " + jsonObject.toString());
+        return jsonObject.toString();
+    }
+
     public static String getResponseMessage(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
