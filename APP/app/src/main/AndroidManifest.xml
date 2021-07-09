@@ -3,14 +3,13 @@
     package="com.city.fixit">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permissions to open camera -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
 
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -20,8 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".UserAuth.SplashScreen"
-                    android:theme="@style/SplashScreen">
+        <activity
+            android:name=".UserAuth.SplashScreen"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,6 +34,6 @@
         <activity android:name=".Report.HomeActivity" />
         <activity android:name=".UserAuth.UserInfoActivity" />
         <activity android:name=".UserAuth.UserStatisticsActivity" />
+        <activity android:name=".UserAuth.UpdateRegisterActivity"></activity>
     </application>
-
 </manifest>

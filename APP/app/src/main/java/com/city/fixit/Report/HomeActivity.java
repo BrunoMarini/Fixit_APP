@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.city.fixit.R;
 import com.city.fixit.UserAuth.MainActivity;
+import com.city.fixit.UserAuth.UpdateRegisterActivity;
 import com.city.fixit.UserAuth.UserInfoActivity;
 import com.city.fixit.UserAuth.UserStatisticsActivity;
 import com.city.fixit.Utils.Constants;
@@ -243,9 +244,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        FLog.d(TAG, "onLocationChanged");
         synchronized (mContext) {
-            FLog.d(TAG, "updated");
             mLocation = location;
         }
     }
@@ -274,7 +273,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
                 startActivity(new Intent(mContext, UserStatisticsActivity.class));
                 break;
             case R.id.change_user_info:
-                //TODO: do
+                startActivity(new Intent(mContext, UpdateRegisterActivity.class));
                 break;
             case R.id.app_logout:
                 Utils.performLogout(mContext);

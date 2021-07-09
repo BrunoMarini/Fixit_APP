@@ -19,6 +19,7 @@ import com.city.fixit.ServerCommunication.CustomOkHttpClient;
 import com.city.fixit.ServerCommunication.JsonParser;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
+import com.city.fixit.Utils.InputValidator;
 import com.city.fixit.Utils.Utils;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -76,20 +77,13 @@ public class LoginActivity extends Activity implements Callback {
     }
 
     private boolean isInputValid(String email, String pass) {
-        ArrayList<String> s = new ArrayList<>();
-        if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            s.add("Email inválido!");
-        }
+        ArrayList<String> errors = new ArrayList<>();
 
-        if(pass.isEmpty() || pass.length() < Constants.PASSWORD_MIN_LENGTH) {
-            s.add("A senha deve contem pelo menos 4 caracteres!");
-        }
-
-        if(s.size() > 0) {
+        if(!InputValidator.isLoginInputValid(email, pass, errors)) {
             FLog.d(TAG, "Stopped! User inserted invalid info!");
             loadingBarStatus(false);
             isErrorState(true);
-            Toast.makeText(mContext, Utils.prepareErrorMessage(s), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, Utils.prepareErrorMessage(errors), Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

@@ -6,4 +6,5 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorLightPurple">#9F8AA9</color>
+    <color name="colorGrey">#948e7f</color>
 </resources>

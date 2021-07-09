@@ -43,6 +43,12 @@
     <!-- UserInfoActivity & UserStatisticsActivity -->
     <string name="tv_email_registered">Email cadastrado:</string>
     <string name="tv_phone_registered">Telefone cadastrado:</string>
+    <string name="tv_old_password">Digite a senha atual</string>
+    <string name="tv_new_password">Digite a nova senha</string>
+    <string name="btn_confirm">Confirmar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="tv_confirm_new_password">Confirme a nova senha</string>
+    <string name="btn_update_register">Atualizar cadastro</string>
     <string name="message_zero_resolved"><![CDATA[Obrigado por fazer parte do FixIt! <br/> <br/>
                                             Seus <font color="red"> %d reportes </font> já tiveram
                                                 <font color="red"> %d visualizações </font> e esse
@@ -66,4 +72,5 @@
         <item> Acumulo de Lixo </item>
         <item> Enchente </item>
     </string-array>
+    <string name="title_activity_update_register">UpdateRegisterActivity</string>
 </resources>

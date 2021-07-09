@@ -17,6 +17,7 @@ import com.city.fixit.ServerCommunication.CustomOkHttpClient;
 import com.city.fixit.ServerCommunication.JsonParser;
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
+import com.city.fixit.Utils.InputValidator;
 import com.city.fixit.Utils.Utils;
 import com.santalu.maskedittext.MaskEditText;
 import com.squareup.okhttp.Callback;
@@ -48,11 +49,11 @@ public class RegisterActivity extends Activity implements Callback {
 
         mContext = this;
         mCallback = this;
-        mEtName = findViewById(R.id.etName);
-        mEtEmail = findViewById(R.id.etLoginEmail);
-        mEtPhone = findViewById(R.id.etPhone);
-        mEtPassword = findViewById(R.id.etLoginPassword);
-        mEtConfirmPass = findViewById(R.id.etConfirmPass);
+        mEtName = findViewById(R.id.et_register_name);
+        mEtEmail = findViewById(R.id.et_register_email);
+        mEtPhone = findViewById(R.id.et_register_phone);
+        mEtPassword = findViewById(R.id.et_register_password);
+        mEtConfirmPass = findViewById(R.id.et_register_confirm_password);
 
         mBtnRegister = findViewById(R.id.btnRegisterUser);
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
@@ -82,35 +83,30 @@ public class RegisterActivity extends Activity implements Callback {
     }
 
     private boolean isInputValid(String name, String email, String phone, String pass, String confirm) {
-        ArrayList<String> s = new ArrayList<>();
-        if(name.length() < 4) {
+        ArrayList<String> errors = new ArrayList<>();
+        if(!InputValidator.isNameValid(name, errors)) {
             mEtName.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.add("Seu nome deve conter pelo menos 4 caracteres!");
         }
 
-        if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if(!InputValidator.isEmailValid(email, errors)) {
             mEtEmail.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.add("Email não valido!");
         }
 
-        if(!Pattern.compile(Constants.PHONE_REGEX).matcher(phone).matches()) {
+        if(!InputValidator.isPhoneValid(phone, errors)) {
             mEtPhone.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.add("Telefone não valido!");
         }
 
-        if(pass.length() < Constants.PASSWORD_MIN_LENGTH) {
+        if(!InputValidator.isPasswordValid(pass, errors)) {
             mEtPassword.setBackgroundResource(R.drawable.edit_text_error_shape);
             mEtConfirmPass.setText("");
-            s.add("Senha deve conter mais de 4 caracteres!");
-        } else if (!pass.equals(confirm)){
+        } else if (!InputValidator.isConfirmPasswordValid(pass, confirm, errors)) {
             mEtPassword.setBackgroundResource(R.drawable.edit_text_error_shape);
             mEtConfirmPass.setBackgroundResource(R.drawable.edit_text_error_shape);
-            s.add("As senhas inseridas são diferentes!");
         }
 
-        if(s.size() > 0) {
+        if(errors.size() > 0) {
             loadingBarStatus(false);
-            Toast.makeText(mContext, Utils.prepareErrorMessage(s), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, Utils.prepareErrorMessage(errors), Toast.LENGTH_LONG).show();
             FLog.d(TAG, "Stopped! User inserted invalid input!");
             return false;
         }

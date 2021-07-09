@@ -8,6 +8,8 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
+
 import com.city.fixit.Utils.Constants;
 import com.city.fixit.Utils.FLog;
 import com.city.fixit.Utils.Utils;
@@ -175,6 +177,39 @@ public class CustomOkHttpClient {
                 .url(url)
                 .addHeader(Constants.SERVER_AUTHORIZATION, Utils.createBearerToken(auth))
                 .get()
+                .build();
+
+        FLog.d(TAG, "Enqueuing retrofit callback!");
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(callback);
+        return true;
+    }
+
+    public static boolean sendUpdateRegister(Context context, Callback callback,
+                             String name, String phone, String oldPass, String newPass) {
+        if (!isNetworkAvailable(context)) {
+            FLog.d(TAG, "Network not available");
+            return false;
+        }
+
+        String auth = Utils.loadToken(context);
+        if (auth == null) {
+            FLog.d(TAG, "Token null!");
+            return false;
+        }
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(Constants.SERVER_SCHEME_HTTPS)
+                .host(Constants.SERVER_HOST)
+                .addPathSegment(Constants.SERVER_USER)
+                .addPathSegment(Constants.SERVER_UPDATE_REGISTER)
+                .build();
+
+        String json = JsonParser.updateRegisterJson(name, phone, oldPass, newPass);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader(Constants.SERVER_AUTHORIZATION, Utils.createBearerToken(auth))
+                .post(RequestBody.create(JSON, json))
                 .build();
 
         FLog.d(TAG, "Enqueuing retrofit callback!");

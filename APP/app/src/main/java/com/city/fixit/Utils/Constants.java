@@ -33,6 +33,7 @@ public class Constants {
     public static final String SERVER_VALIDATE = "validate";
     public static final String SERVER_INFO = "info";
     public static final String SERVER_STATISTICS = "stats";
+    public static final String SERVER_UPDATE_REGISTER = "updateRegister";
 
     public static final int HTTP_CONFLICT = 409;
     public static final int HTTP_SERVER_ERROR = 500;
@@ -42,9 +43,10 @@ public class Constants {
 
     public static final String PHONE_REGEX = "^\\+55 \\(([0-9]+)\\) ([0-9]){5}-([0-9]){4}$";
 
-    public static final int PASSWORD_MIN_LENGTH = 4;
-
     public static final String USER_SHARED_PREFERENCES = "UserSharedPreferences";
     public static final String USER_TOKEN_KEY = "UserTokenKey";
     public static final String USER_REMEMBER_OPTION = "UserRememberOption";
+
+    public static final String INTENT_EXTRA_NAME = "userExtraName";
+    public static final String INTENT_EXTRA_PHONE = "userExtraPhone";
 }

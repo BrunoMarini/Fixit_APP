@@ -46,14 +46,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/etName"
+                    android:layout_alignStart="@+id/et_register_name"
                     android:text="@string/tv_name"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/etName"
-                    app:layout_constraintStart_toStartOf="@+id/etName" />
+                    app:layout_constraintBottom_toTopOf="@+id/et_register_name"
+                    app:layout_constraintStart_toStartOf="@+id/et_register_name" />
 
                 <EditText
-                    android:id="@+id/etName"
+                    android:id="@+id/et_register_name"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="40dp"
@@ -76,14 +76,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/etLoginEmail"
+                    android:layout_alignStart="@+id/et_register_email"
                     android:text="@string/tv_email"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/etLoginEmail"
-                    app:layout_constraintStart_toStartOf="@+id/etLoginEmail" />
+                    app:layout_constraintBottom_toTopOf="@+id/et_register_email"
+                    app:layout_constraintStart_toStartOf="@+id/et_register_email" />
 
                 <EditText
-                    android:id="@+id/etLoginEmail"
+                    android:id="@+id/et_register_email"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:maxLines="1"
@@ -106,14 +106,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/etPhone"
+                    android:layout_alignStart="@+id/et_register_phone"
                     android:text="@string/tv_phone"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/etPhone"
-                    app:layout_constraintStart_toStartOf="@+id/etPhone" />
+                    app:layout_constraintBottom_toTopOf="@+id/et_register_phone"
+                    app:layout_constraintStart_toStartOf="@+id/et_register_phone" />
 
                 <com.santalu.maskedittext.MaskEditText
-                    android:id="@+id/etPhone"
+                    android:id="@+id/et_register_phone"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="40dp"
@@ -138,14 +138,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/etLoginPassword"
+                    android:layout_alignStart="@+id/et_register_password"
                     android:text="@string/tv_password"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/etLoginPassword"
-                    app:layout_constraintStart_toStartOf="@+id/etLoginPassword" />
+                    app:layout_constraintBottom_toTopOf="@+id/et_register_password"
+                    app:layout_constraintStart_toStartOf="@+id/et_register_password" />
 
                 <EditText
-                    android:id="@+id/etLoginPassword"
+                    android:id="@+id/et_register_password"
                     android:maxLines="1"
                     android:lines="1"
                     android:singleLine="true"
@@ -169,14 +169,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/etConfirmPass"
+                    android:layout_alignStart="@+id/et_register_confirm_password"
                     android:text="@string/tv_confirm_pass"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/etConfirmPass"
-                    app:layout_constraintStart_toStartOf="@+id/etConfirmPass" />
+                    app:layout_constraintBottom_toTopOf="@+id/et_register_confirm_password"
+                    app:layout_constraintStart_toStartOf="@+id/et_register_confirm_password" />
 
                 <EditText
-                    android:id="@+id/etConfirmPass"
+                    android:id="@+id/et_register_confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="40dp"
@@ -195,7 +195,7 @@
                     android:id="@+id/btnRegisterUser"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_below="@+id/etConfirmPass"
+                    android:layout_below="@+id/et_register_confirm_password"
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="40dp"
