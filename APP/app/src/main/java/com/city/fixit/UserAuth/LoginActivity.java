@@ -49,8 +49,8 @@ public class LoginActivity extends Activity implements Callback {
         mContext = this;
         mCallback = this;
 
-        mEtEmail = findViewById(R.id.etLoginEmail);
-        mEtPassword = findViewById(R.id.etLoginPassword);
+        mEtEmail = findViewById(R.id.et_login_email);
+        mEtPassword = findViewById(R.id.et_login_password);
         mSwitch = findViewById(R.id.switchRememberMe);
 
         mBtnLogin = findViewById(R.id.btnLogin);

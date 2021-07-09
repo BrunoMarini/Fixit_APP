@@ -62,7 +62,7 @@ public class FormActivity extends Activity implements Callback {
 
         mSpinnerTypes = findViewById(R.id.spinnerTypes);
         setSpinnerItems();
-        mEtDesc = findViewById(R.id.etUserDescription);
+        mEtDesc = findViewById(R.id.et_report_user_description);
 
         mBtnSend = findViewById(R.id.btnSubmit);
         mBtnSend.setOnClickListener(new View.OnClickListener() {
