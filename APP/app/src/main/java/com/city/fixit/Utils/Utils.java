@@ -83,7 +83,7 @@ public class Utils {
 
     public static String convertBitmapToBase64(Bitmap b) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+        b.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
 
