@@ -8,6 +8,11 @@
     <string name="btn_register"> Registrar </string>
     <string name="title_activity_register">Register</string>
 
+    <!-- Login Strings -->
+    <string name="sw_stay_logged">Permanecer logado</string>
+    <string name="sw_text_on">Sim</string>
+    <string name="sw_text_off">Não</string>
+
     <!-- RegisterActivity Strings -->
     <string name="tv_name"> Name </string>
     <string name="tv_phone"> Phone </string>
